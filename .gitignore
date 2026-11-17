@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# validate_obda.py writes its intermediate Ontop query results here at runtime
+obda/_*.csv
+
+# outputs written by code/quantify_peer_uncertainty.py
+code/peer_uncertainty_results.json
+code/peer_uncertainty_stock.csv
+peer_uncertainty_results.json
+peer_uncertainty_stock.csv

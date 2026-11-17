@@ -1,0 +1,13 @@
+PREFIX bms: <http://example.org/bms#>
+# Granularity selection (Step 3) input: per-building own elevator/escalator
+# density bindings. step3_reasoning._has_own_or_peer checks column-level
+# nullability (own row exists AND this specific column is non-null), not
+# just row existence, so this must be field-level like
+# own_struct_thickness.sparql -- a VerticalTransportationSystem row with
+# elevator density but a null escalator density must not read as "has
+# escalator data."
+SELECT ?b (BOUND(?elev) AS ?hasElev) (BOUND(?esc) AS ?hasEsc) WHERE {
+  ?vt a bms:VerticalTransportationSystem ; bms:belongsToBuilding ?b .
+  OPTIONAL { ?vt bms:elevatorDensityPerArea ?elev . FILTER(?elev > 0) }
+  OPTIONAL { ?vt bms:escalatorDensityPerArea ?esc }
+} ORDER BY ?b

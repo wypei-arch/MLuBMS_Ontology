@@ -1,0 +1,8 @@
+PREFIX bms: <http://example.org/bms#>
+# Granularity selection (Step 3) input: buildings with an own observed unit
+# count (mep_subsys_drainage's "bool(N_unit)" branch). See
+# own_occupancy_count.sparql for why this is a mandatory pattern, not an
+# OPTIONAL alongside `?b a bms:Building`.
+SELECT ?b ?unitCount WHERE {
+  ?b a bms:Building ; bms:unitCount ?unitCount .
+} ORDER BY ?b

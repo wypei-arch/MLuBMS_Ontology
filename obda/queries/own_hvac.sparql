@@ -1,0 +1,7 @@
+PREFIX bms: <http://example.org/bms#>
+# Granularity selection (Step 3) input: buildings with their own observed
+# HVACSystem individual (reached_mep_hvac's "own" branch; the mapping's SQL
+# source already filters is_observed=1, so existence alone is sufficient).
+SELECT DISTINCT ?b WHERE {
+  ?hs a bms:HVACSystem ; bms:belongsToBuilding ?b .
+} ORDER BY ?b

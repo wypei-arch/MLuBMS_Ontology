@@ -1,0 +1,12 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 3 (vertical-transportation peer-sharing): per-archetype average
+# elevator/escalator density. Same OPTIONAL+COUNT pattern as
+# share_structural.sparql -- a building's VerticalTransportationSystem
+# individual can have one density observed and not the other.
+SELECT ?arch (AVG(?elev) AS ?avgElev) (COUNT(?elev) AS ?nElev)
+             (AVG(?esc) AS ?avgEsc) (COUNT(?esc) AS ?nEsc) WHERE {
+  ?vt a bms:VerticalTransportationSystem ; bms:belongsToBuilding ?peer ; bms:isObserved true .
+  ?peer bms:hasArchetype ?arch .
+  OPTIONAL { ?vt bms:elevatorDensityPerArea ?elev . FILTER(?elev > 0) }
+  OPTIONAL { ?vt bms:escalatorDensityPerArea ?esc }
+} GROUP BY ?arch ORDER BY ?arch

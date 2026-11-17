@@ -1,0 +1,12 @@
+PREFIX bms: <http://example.org/bms#>
+# Granularity selection (Step 3) input: buildings with at least one own
+# (own-observed) MaterialIntensity value, for reached_mi. Kept as its own
+# DISTINCT existence query (not folded into a multi-OPTIONAL query with the
+# other own_*.sparql checks) because a building can have several
+# MaterialIntensity rows (one per material); folding it into a single
+# multi-OPTIONAL query alongside the other own-system checks would produce
+# a cross-product multiplicity blow-up per building instead of a clean
+# existence flag.
+SELECT DISTINCT ?b WHERE {
+  ?mi a bms:MaterialIntensity ; bms:forBuilding ?b .
+} ORDER BY ?b

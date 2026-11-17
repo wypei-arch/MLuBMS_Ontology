@@ -1,0 +1,7 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 2, tier 1 (exact): building matched to an archetype on
+# use type + construction-year bucket + structural category, all three equal.
+SELECT ?b ?arch WHERE {
+  ?b a bms:Building ; bms:occupancyType ?u ; bms:structuralType ?s ; bms:yearBucket ?yb .
+  ?arch a bms:Archetype ; bms:archetypeUseType ?u ; bms:archetypeStructureType ?s ; bms:archetypeYearBucket ?yb .
+} ORDER BY ?b

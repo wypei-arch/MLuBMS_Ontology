@@ -1,0 +1,12 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 3 (plumbing peer-sharing): per-archetype average sanitary
+# fixture density and main/branch drainage length factors.
+SELECT ?arch (AVG(?fix) AS ?avgFix) (COUNT(?fix) AS ?nFix)
+             (AVG(?dmain) AS ?avgDmain) (COUNT(?dmain) AS ?nDmain)
+             (AVG(?dbranch) AS ?avgDbranch) (COUNT(?dbranch) AS ?nDbranch) WHERE {
+  ?ps a bms:PlumbingSystem ; bms:belongsToBuilding ?peer ; bms:isObserved true .
+  ?peer bms:hasArchetype ?arch .
+  OPTIONAL { ?ps bms:fixtureDensityPerUnit ?fix }
+  OPTIONAL { ?ps bms:drainageMainLengthFactor ?dmain }
+  OPTIONAL { ?ps bms:drainageBranchLengthFactor ?dbranch }
+} GROUP BY ?arch ORDER BY ?arch

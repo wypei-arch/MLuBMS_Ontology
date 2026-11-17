@@ -1,0 +1,1024 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+   xmlns="http://example.org/bms#"
+   xmlns:owl="http://www.w3.org/2002/07/owl#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+>
+  <rdf:Description rdf:about="http://example.org/bms#Building">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Building</rdfs:label>
+    <owl:disjointWith rdf:resource="http://example.org/bms#Material"/>
+    <owl:disjointWith rdf:resource="http://example.org/bms#Site"/>
+    <rdfs:subClassOf rdf:nodeID="Nb4ca60de291f4f68b286640327d2edf6"/>
+    <rdfs:subClassOf rdf:resource="https://w3id.org/bot#Building"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#VerticalTransportationSystem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <calculationFormula>Elevator: N_ele=GFA*alpha_ele; S_ele=N_ele*w_ele*p_i. Escalator: N_esc=GFA*alpha_esc; S_esc=N_esc*w_esc*p_i.</calculationFormula>
+    <applicabilityCondition>Elevator: building type B2/B3/A2 AND N_f&gt;3. Escalator: building type A1 (commercial/retail) AND N_f&gt;3. [Corrected from a previous "D-metro" label, which did not match any code in the building function classification (bms:function): A1, A2, B1, B2, B3, C, D (Industrial), E, etc. — D is Industrial, not a transit/metro category, and no metro-station type is currently defined; escalators are scoped to A1 only unless a transit-facility type is added.]</applicabilityCondition>
+    <rdfs:comment xml:lang="en">DATA PROVENANCE NOTE: elevatorDensityPerArea (alpha_ele) and escalatorDensityPerArea (alpha_esc) are an area-based proxy adopted for data-scarce, urban-scale estimation. The recognised lift-planning standard, ISO 8100-32:2020, sizes lifts from building population and peak-traffic handling capacity (e.g., offices: deliver ≥12% of building population within 5 minutes), not floor area \citep{iso8100-32}. No published standard was found using the specific area-density ranges given here; treat as adjustable defaults, not standard-derived constants.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#siteType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Site"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#unit">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Material"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">String values follow the unit vocabulary of the Ontology of units of Measure (OM, e.g. "kg/m2", "m3") rather than being reified as om:Measure individuals, since this property is populated directly from the relational database and read by the SPARQL/Python reasoning pipeline as a plain literal.</rdfs:comment>
+    <rdfs:seeAlso rdf:resource="http://www.ontology-of-units-of-measure.org/resource/om-2/Unit"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#footprintPerimeter">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#wallThickness">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#StructuralSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#drainageBranchLengthFactor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">drainage branch pipe length factor</rdfs:label>
+    <rdfs:comment xml:lang="en">Empirical density factor for branch drainage pipes (alpha_drain_branch, m/m2). Default ≈ 0.08 m/m2.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#ductThickness">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">duct sheet thickness</rdfs:label>
+    <rdfs:comment xml:lang="en">Sheet metal thickness of ductwork T_duct (m). Used in material stock calculation: S = 2*(a+b)*L_duct*T_duct*rho.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Neb797587e5364a11b519160ac0f7274b">
+    <rdf:first rdf:resource="http://example.org/bms#Building"/>
+    <rdf:rest rdf:nodeID="N061b20dbc34f43a6af42c1623bdf1bb9"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#geometryType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#elevatorDensityPerArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#VerticalTransportationSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#beamSectionArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#StructuralSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#archetypeUseType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Archetype"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">The building function/use type this archetype represents (same code space as bms:occupancyType on Building), e.g. 'E', 'A2', 'B2'.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#selectedGranularityLevel">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#gasPipeSafetyFactor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#GasSupplySystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">gas pipe safety factor</rdfs:label>
+    <rdfs:comment xml:lang="en">Overall safety factor applied to estimated gas pipe mass (sf3 ≈ 1.15). Engineering design heuristic; not codified in a single published standard.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#structuralType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#volume">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#developmentPhase">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Site"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#constructionPeriod">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="N6c0c1838530f4a8e9df97f59c21412d5"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <owl:imports rdf:resource="https://w3id.org/bot#"/>
+    <owl:imports rdf:resource="https://saref.etsi.org/saref4bldg/v1.1.2/"/>
+    <owl:imports rdf:resource="http://bimerr.iot.linkeddata.es/def/material-properties/ontology.ttl"/>
+    <owl:imports rdf:resource="https://raw.githubusercontent.com/HajoRijgersberg/OM/master/om-2.0.rdf"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Na789eab76d7c4f7f97a3a2dafc9f4810">
+    <rdf:first rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdf:rest rdf:nodeID="Ncb92d0efe7774d1db762482e3033d131"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#defaultMEPParameters">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Archetype"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#isObserved">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="N37c47ec94f6a48e88c7314ee5ac25264"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#drainagePipeLengthPerArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Necf95f507666481ca6210ef0e0030809">
+    <rdf:first rdf:resource="http://example.org/bms#Archetype"/>
+    <rdf:rest rdf:nodeID="Nd50ff5bd626c46978b385f9496d3f727"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#drainageMainLengthFactor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">drainage main pipe length factor</rdfs:label>
+    <rdfs:comment xml:lang="en">Empirical density factor for main drainage pipes (alpha_drain_main, m/m2). Typical range: 1.5–2.0 m/m2 (includes vertical stacks).</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Ncc3435bca3994fab88695ecb9f21854d">
+    <rdf:first rdf:resource="http://example.org/bms#ElectricalSystem"/>
+    <rdf:rest rdf:nodeID="N833a7116e40a42669ecfa5b467fbdb6d"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N5cf3cbcf9c5948258bc5f303f9fda440">
+    <rdf:first rdf:resource="http://example.org/bms#Archetype"/>
+    <rdf:rest rdf:nodeID="N5ce7409bf9cc4a7798143c09b5cee182"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Ncb92d0efe7774d1db762482e3033d131">
+    <rdf:first rdf:resource="http://example.org/bms#ElectricalSystem"/>
+    <rdf:rest rdf:nodeID="Nb67dcfaa8c2745bb9950d7464a36417a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#grossFloorArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#windowToWallRatio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N45fac6cb913a4f17b927a1649e50512e">
+    <rdf:first rdf:resource="http://example.org/bms#Site"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#belongsToSite">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Site"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#airflowToCoolingLoadRatio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">airflow-to-cooling-load ratio</rdfs:label>
+    <rdfs:comment xml:lang="en">Ratio k (m3/h per kW of cooling load) used to derive total AHU/ductwork supply airflow from the cooling load already computed for the chiller (Q_air = k * Q_total / 1000). For hot-humid tropical climates (e.g., Singapore), k ≈ 145–169 m3/h/kW, equivalent to the industry rule of thumb of 300–350 CFM/ton (lower than the 400 CFM/ton temperate-climate baseline, reflecting the need for longer coil contact time to remove latent/humidity load) \citep{accaCfmPerTon}.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nd1a4fe3845e5453f931e632b280ec410">
+    <rdf:first rdf:resource="http://example.org/bms#Material"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#peakDemandFactor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#applicabilityCondition">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+    <rdfs:label xml:lang="en">applicability condition</rdfs:label>
+    <rdfs:comment xml:lang="en">Specifies the building type or data conditions under which a calculation rule applies.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N4a37589bad094abe9813090e19d89cba">
+    <rdf:first rdf:resource="http://example.org/bms#Component"/>
+    <rdf:rest rdf:nodeID="N4fef9ccef0b54788a7fe58ca8a7f76f3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#riserPipeUnitWeight">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#GasSupplySystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">riser pipe unit weight</rdfs:label>
+    <rdfs:comment xml:lang="en">Unit weight of the steel gas riser pipe, w_riser (kg/m). Default DN50 ≈ 5.44 kg/m per ASME B36.10 Schedule 40 \citep{engtoolboxSteelPipe}. Replaces the previous "riserDiameterFactor" (a length-multiplier formulation that conflated diameter-driven weight differences with length adjustment); use this unit weight directly against the riser's own length instead.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#waterHeaterDensityPerUnit">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">water heater density per unit</rdfs:label>
+    <rdfs:comment xml:lang="en">Number of water heaters per served unit (alpha_heater ≈ 1 per unit).</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#equivalentAreaFactor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#StructuralSystem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://example.org/bms#BuildingSystem"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#componentType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#INSUFFICIENT_DATA">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://example.org/bms#ModelGranularityLevel"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N61e08890d85c43fe939500dd2d218c88">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="Nd9de870c8c144151a72c8459d7c44234"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#hasGranularityLevel">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://example.org/bms#ModelGranularityLevel"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#servedAreaRatio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="N4b217a25619b4909b8ce69bee18d3435"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#floorToFloorHeight">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#GasSupplySystem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdfs:label xml:lang="en">Gas Supply System</rdfs:label>
+    <rdfs:comment xml:lang="en">Piped gas distribution system (town gas and/or natural gas, per SS608:2015) comprising steel riser/main pipes and copper branch pipes to individual units. In Singapore, piped gas service is provided primarily to residential premises (HDB/condominium) and to hotel/F&amp;B kitchens; it is not generally supplied to offices or industrial premises \citep{ss608-2015}.</rdfs:comment>
+    <calculationFormula>Steel riser+main: H_f=H/N_f [floor-to-floor height, derived; falls back to bms:floorToFloorHeight if directly available]; L_riser=N_f*H_f (=H); L_main=L_f*N_f; S_steel=(L_riser*w_riser + L_main*w_main)*sf3 [each segment uses its OWN diameter-specific unit weight — DN50 riser w_riser≈5.44 kg/m, DN40 main w_main≈4.05 kg/m, ASME B36.10 Schedule 40 — rather than a separate "diameter factor" applied to length, which conflated diameter-driven weight differences with length adjustment]. Copper branch: L_branch=N_unit*alpha_unit; S_copper=L_branch*w_copper*sf3 [DN15, w_copper≈0.42 kg/m, ASTM B88 Type L].</calculationFormula>
+    <applicabilityCondition>Applies to building function (bms:function) B1 (landed residential), B2 (condominium), B3 (HDB), and C (hotel, kitchen use) — and, for the copper branch only, to F&amp;B/restaurant premises within commercial (A1) buildings. Generally NOT applicable to A2 (office) or D (industrial), which are not typically served by piped gas in Singapore \citep{ss608-2015}.</applicabilityCondition>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nfd5a2cee842c49f395d81076daaabe34">
+    <rdf:first rdf:resource="http://example.org/bms#Site"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#cableDensityPerArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#ElectricalSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#hasComponent">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Component"/>
+    <owl:inverseOf rdf:resource="http://example.org/bms#belongsToSystem"/>
+    <rdfs:subPropertyOf rdf:resource="https://w3id.org/bot#hasElement"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#averageUnitArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nc725d38c3ac14cc4bd383a8db2527373">
+    <rdf:first rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdf:rest rdf:nodeID="N19a58c278a804b4db11d758c9dddd2d3"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#constructionYear">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#gYear"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#country">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Region"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#ModelGranularityLevel">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#columnSectionArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#StructuralSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#mainPipeUnitWeight">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#GasSupplySystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">main pipe unit weight</rdfs:label>
+    <rdfs:comment xml:lang="en">Unit weight of the steel gas main pipe, w_main (kg/m). Default DN40 ≈ 4.05 kg/m per ASME B36.10 Schedule 40 \citep{engtoolboxSteelPipe}. Replaces the previous "mainPipeDiameterFactor"; see riserPipeUnitWeight comment for rationale.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nb67dcfaa8c2745bb9950d7464a36417a">
+    <rdf:first rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nc36ce9df17e84813a309cb884f0f691a">
+    <rdf:first rdf:resource="http://example.org/bms#Region"/>
+    <rdf:rest rdf:nodeID="N2d5cf2116b954a34ab494e441a67375a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#PlumbingSystem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <calculationFormula>Water supply pipe: L_pipe=alpha_waterpipe*GFA (alpha≈0.2 m/m2); S=L_pipe*w. Sanitary fixtures: N_unit=GFA/A_unit; N_fixture=N_unit*alpha_fixture (alpha≈1-2/unit); S=N_fixture*w*p_i. Drainage pipe: L_drain=GFA*alpha_drain (main: 1.5–2 m/m2; branch: 0.08 m/m2); S=L_drain*w. Water tank: eps=n*Q [L/day, daily demand]; V_tank=eps*f [L; tank sized for ~1-day peak storage — f is a peak-demand factor, NOT a unit conversion]; A_surface=6*V_tank^(2/3) [cube tank]; S_steel=A_surface*t_steel*rho_steel. Water heater: N_unit=GFA/A_unit; N_heater=N_unit*alpha_heater; S=N_heater*w*p_i. Pump: P=lambda1*V_tank*(H+H_friction) [V_tank reused from the Water Tank row, i.e. pump sized to lift one tank's worth of water; lambda1 is an empirical constant absorbing unit conversion and assumed efficiency, NOT derived from the standard P=rho*g*Q*H/eta formula with an explicit flow rate Q]; S=P*w.</calculationFormula>
+    <rdfs:comment xml:lang="en">DATA PROVENANCE NOTE: alpha_waterpipe (water supply pipe density), alpha_fixture (sanitary fixture density), alpha_drain (main/branch drainage pipe density), and lambda1 (pump power coefficient) are preliminary engineering design heuristics, not values codified in a single published standard. Relevant Singapore standards exist — SS636:2018 Code of Practice for Water Services (formerly CP48:2005) for water supply, and the PUB Code of Practice on Sewerage and Sanitary Works (3rd Edition, 2025) for fixtures/drainage — but their specific numeric design tables could not be independently verified at the time of writing (source documents were access-protected). Treat these factors as adjustable defaults pending verification against the full code text.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#archetypeKey">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Archetype"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#MI_LEVEL">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://example.org/bms#ModelGranularityLevel"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N9904a2fe3fb0405eaa30bb54ff6b076c">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N839573b45ac047f18b8eda2722219b96">
+    <rdf:first rdf:resource="http://example.org/bms#Building"/>
+    <rdf:rest rdf:nodeID="Nc725d38c3ac14cc4bd383a8db2527373"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#materialProportions">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N9adc848b0c8745baae9a3582323beeb0">
+    <rdf:first rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdf:rest rdf:nodeID="N8b26b752d1bd438090d0b747604fdf35"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#servedArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="N8a9949e3c9a148f693873bd048c9012e"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#systemType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N492f451bd04e41319543d0cda3520c33">
+    <rdf:first rdf:resource="http://example.org/bms#Region"/>
+    <rdf:rest rdf:nodeID="Nfd5a2cee842c49f395d81076daaabe34"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#wiringLengthPerArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#ElectricalSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">wiring length per area</rdfs:label>
+    <rdfs:comment xml:lang="en">Empirical wiring density factor alpha_electri (m/m2). Default ≈ 3 m/m2.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#landUseType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Site"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#thickness">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#averageMaterialIntensityValues">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Archetype"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#proportion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Material"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#ductLengthFactor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#hasSystem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <owl:inverseOf rdf:resource="http://example.org/bms#belongsToBuilding"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#chillerUnitCapacity">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">chiller unit capacity</rdfs:label>
+    <rdfs:comment xml:lang="en">Cooling capacity of a single chiller unit Q_each (kW). Used to calculate number of chillers: N_chiller = Q_total / Q_each.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#averageDailyWaterUse">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#conditionedAreaRatio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Na20e6d6a11ce46f2b461508564c8dcbe">
+    <rdf:first rdf:resource="http://example.org/bms#Material"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#sourceId">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="Naca127b30ff34c3ca71bf66538299278"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N9fd1f8c58a0f4c3e84521a0763e1d5ab">
+    <rdf:first rdf:resource="http://example.org/bms#Material"/>
+    <rdf:rest rdf:nodeID="N492f451bd04e41319543d0cda3520c33"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N4fef9ccef0b54788a7fe58ca8a7f76f3">
+    <rdf:first rdf:resource="http://example.org/bms#Material"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Ne09cae709a95443e85d590a37c17b0bd">
+    <rdf:first rdf:resource="http://example.org/bms#Archetype"/>
+    <rdf:rest rdf:nodeID="Neb797587e5364a11b519160ac0f7274b"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#escalatorDensityPerArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#VerticalTransportationSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#fixtureDensityPerUnit">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#belongsToRegion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Site"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Region"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#buildingCode">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N5ce7409bf9cc4a7798143c09b5cee182">
+    <rdf:first rdf:resource="http://example.org/bms#Building"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#address">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Site"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#numberOfUnits">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#sourceType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="Nd07f70ac0c40415aad356dba9e464f32"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#defaultMaterialComposition">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#StructuralSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#footprintArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nae6fb6a5904f442f9b260ff3f37d9690">
+    <rdf:first rdf:resource="http://example.org/bms#Component"/>
+    <rdf:rest rdf:nodeID="Nfb4396dbbc6946b98fdea2e4e37c1658"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#regionType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Region"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#floorCount">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#hvacSystemType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nc410dd8f48b144e99817a0f713c9aa46">
+    <rdf:first rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdf:rest rdf:nodeID="N4a37589bad094abe9813090e19d89cba"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#climateZone">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Region"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N6759c96a7a4b4d2cbfeee5adffb47bf5">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="Necf95f507666481ca6210ef0e0030809"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#pumpPowerFactor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">pump power factor</rdfs:label>
+    <rdfs:comment xml:lang="en">Empirical factor lambda1 (≈ 0.005) used to estimate pump power: P = lambda1 * V_tank * (H_building + H_friction).</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#archetypeYearBucket">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Archetype"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Construction-year bucket this archetype represents: '&lt;1980', '1980-1999', or '&gt;=2000'.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#count">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nb4ca60de291f4f68b286640327d2edf6">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Restriction"/>
+    <owl:onProperty rdf:resource="http://example.org/bms#hasGranularityLevel"/>
+    <owl:cardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:cardinality>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#ElectricalSystem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <calculationFormula>Wiring: L_electri=alpha_electri*GFA (alpha≈3 m/m2); S_electri=L_electri*w_electri. Cable tray/conduit: L_main=H_building*alpha_main (alpha_main≈1.1); L_branch=P_building*N_floor*alpha_branch (alpha_branch≈0.8); S=(L_main+L_branch)*A*t*rho_i.</calculationFormula>
+    <rdfs:comment xml:lang="en">DATA PROVENANCE NOTE: alpha_electri, alpha_main, and alpha_branch are preliminary engineering design heuristics, not values codified in a single published standard. The relevant Singapore standard for electrical installations is SS 638:2018 Code of Practice for Electrical Installations (superseding CP5:1998), which specifies conduit/trunking/duct fill (space) factors (≤40%/45%/35%) but not an area-based wiring-length density factor; the specific numeric values used here could not be independently verified against SS 638:2018 at the time of writing. Treat as adjustable defaults.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#confidenceScore">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="N61e08890d85c43fe939500dd2d218c88"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#policyContext">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Region"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N94f71c8d29fc4a0993953fb4670fdaf8">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="N81976e4dc3dc42d29e16496608c7040f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#hasBuilding">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Site"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Building"/>
+    <owl:inverseOf rdf:resource="http://example.org/bms#belongsToSite"/>
+    <rdfs:label xml:lang="en">has building</rdfs:label>
+    <rdfs:comment xml:lang="en">Relates a Site to a Building located on it.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="https://w3id.org/bot#hasBuilding"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#Component">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:disjointWith rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdfs:subClassOf rdf:resource="https://w3id.org/bot#Element"/>
+    <rdfs:subClassOf rdf:resource="https://saref.etsi.org/saref4bldg/BuildingObject"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nd9de870c8c144151a72c8459d7c44234">
+    <rdf:first rdf:resource="http://example.org/bms#Building"/>
+    <rdf:rest rdf:nodeID="N3ee2f9e0a2204ae087d90740fcf6bd16"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#latitude">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Site"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#sectionArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#defaultSystemTypes">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Archetype"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N2d5cf2116b954a34ab494e441a67375a">
+    <rdf:first rdf:resource="http://example.org/bms#Site"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#hasArchetype">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Archetype"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#footprintLength">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">footprint length</rdfs:label>
+    <rdfs:comment xml:lang="en">Representative length of the building footprint (L_f, m). Used for gas main pipe length estimation.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nda7e8666d0994f379479d0f2b833b6ab">
+    <rdf:first rdf:resource="http://example.org/bms#Component"/>
+    <rdf:rest rdf:nodeID="Na20e6d6a11ce46f2b461508564c8dcbe"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#isInferred">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="N94f71c8d29fc4a0993953fb4670fdaf8"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#ductWindSpeed">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">duct wind speed</rdfs:label>
+    <rdfs:comment xml:lang="en">Main pipeline air velocity v (m/s) for ductwork cross-section calculation. Default ≈ 6 m/s.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nd50ff5bd626c46978b385f9496d3f727">
+    <rdf:first rdf:resource="http://example.org/bms#Building"/>
+    <rdf:rest rdf:nodeID="Ne32ed625835d4927849818752c9c159a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#conditionedArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#unitWeight">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N81976e4dc3dc42d29e16496608c7040f">
+    <rdf:first rdf:resource="http://example.org/bms#Building"/>
+    <rdf:rest rdf:nodeID="N463e90b7c5d045beb201824c7ad098c6"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#archetypeStructureType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Archetype"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Structural system this archetype represents (same code space as bms:structuralType on Building); blank/absent if this archetype pools buildings regardless of structure.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nfb4396dbbc6946b98fdea2e4e37c1658">
+    <rdf:first rdf:resource="http://example.org/bms#Material"/>
+    <rdf:rest rdf:nodeID="N6b1cfd7955664df48e5cc69d7872e61e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#belongsToSystem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://example.org/bms#BuildingSystem"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#unitCount">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#serviceConditionRule">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#VerticalTransportationSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Ne32ed625835d4927849818752c9c159a">
+    <rdf:first rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdf:rest rdf:nodeID="Nc36ce9df17e84813a309cb884f0f691a"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#electricalLoadClass">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#ElectricalSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#airflowPerArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">minimum outdoor air rate</rdfs:label>
+    <rdfs:comment xml:lang="en">Repurposed as minOutdoorAirRate: minimum fresh-air ventilation requirement per floor area, by building type, per SS553:2009 Table 1 (e.g., offices 2.0 m3/h/m2, restaurants 12.2 m3/h/m2). This is NOT the total AHU supply airflow — do not use this property to size N_AHU or ductwork; use bms:airflowToCoolingLoadRatio instead. Retained only as an optional cross-check for a separate fresh-air/economizer sub-system.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N0f00dca438864d9f9c426cdb971c9fa2">
+    <rdf:first rdf:resource="http://example.org/bms#Building"/>
+    <rdf:rest rdf:nodeID="N9adc848b0c8745baae9a3582323beeb0"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#cableTrayMainFactor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#ElectricalSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#granularityReason">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N4b217a25619b4909b8ce69bee18d3435">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="N7d820ba45d7a4f4eaa1a1188bee99737"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#longitude">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Site"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N833a7116e40a42669ecfa5b467fbdb6d">
+    <rdf:first rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#density">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Material"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#STRUCTURAL_COMPONENT_LEVEL">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://example.org/bms#ModelGranularityLevel"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#copperBranchUnitWeight">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#GasSupplySystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">copper branch pipe unit weight</rdfs:label>
+    <rdfs:comment xml:lang="en">Unit weight of the copper branch pipe to each unit, w_copper (kg/m). Default DN15 ≈ 0.42 kg/m per ASTM B88-22 Type L \citep{astmB88}. Since only one diameter is used for branch piping, the previous "diameter factor ≈ 1.0" was a redundant no-op and has been removed from the calculation chain.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nc6381cbc67e24760ac2e3847eae8b049">
+    <rdf:first rdf:resource="http://example.org/bms#Component"/>
+    <rdf:rest rdf:nodeID="Ne17e44bcca1b4fd2a88f780f33d41825"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#width">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#waterPipeLengthPerArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#PlumbingSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#refrigerantPipeLayoutCoefficient">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">refrigerant pipe layout coefficient</rdfs:label>
+    <rdfs:comment xml:lang="en">Layout coefficient k for estimating refrigerant copper pipe length: L = k * sqrt(GFA). Typical range: 1.1–1.3.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#slabThickness">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#StructuralSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N061b20dbc34f43a6af42c1623bdf1bb9">
+    <rdf:first rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdf:rest rdf:nodeID="Nae6fb6a5904f442f9b260ff3f37d9690"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#archetypeAssignmentMethod">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#layoutCoefficient">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#usesMaterial">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Material"/>
+    <rdfs:subPropertyOf rdf:resource="http://bimerr.iot.linkeddata.es/def/material-properties#hasMaterial"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#defaultComponentParameters">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Archetype"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#occupancyCount">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#Region">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Naca127b30ff34c3ca71bf66538299278">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="N839573b45ac047f18b8eda2722219b96"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#hasSite">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Region"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Site"/>
+    <owl:inverseOf rdf:resource="http://example.org/bms#belongsToRegion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#height">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#coolingLoadPerArea">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#HVACSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#HVACSystem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <calculationFormula>Central chiller: A_eq=A_conditioned when observed; otherwise A_eq=GFA*p_conditioned when a building-specific or archetype-peer conditioned-area ratio is available; otherwise A_eq=GFA (full-conditioning fallback). Q_total=A_eq*q [cooling load, W]; N_chiller=Q_total/Q_each; S_chiller=N_chiller*w*p_i. Cooling tower: N_tower≈N_chiller; S=N_tower*w*p_i. Pump: N_pump≈2–3*N_chiller; S=N_pump*w*p_i. AHU: Q_air=k*Q_total/1000 [total supply airflow, m3/h, derived from the SAME Q_total as the chiller — NOT from a separate outdoor-air-only rate]; N_AHU=Q_air/q_AHU; S=N_AHU*w*p_i. Ductwork: Q_air=k*Q_total/1000; A_duct=(Q_air/N_f)/(3600*v); L_duct=GFA*gamma; S=2*(sqrt(A_duct)+sqrt(A_duct))*L_duct*T_duct*rho_i [square duct assumed]. Split: N_indoor=N_unit; S=N*w*p_i. Refrigerant pipe: L=k_layout*sqrt(GFA); S=L*w.</calculationFormula>
+    <calculationFormula>IMPORTANT: airflowToCoolingLoadRatio (k, m3/h per kW) drives total AHU/ductwork supply airflow sizing and must NOT be confused with minOutdoorAirRate (SS553 Table 1, m3/h per m2), which is only the minimum fresh-air ventilation requirement by building type and is far smaller than total supply airflow (often 5-10x less, since most AHU supply air is recirculated, not fresh). Using the SS553 Table 1 fresh-air rate directly as the AHU sizing driver would undercount N_AHU and ductwork material stock.</calculationFormula>
+    <applicabilityCondition>Central Chiller System applies when building function (bms:function) is A1 (Commercial), A2 (Office), C (Hotel/Hospital), or E (Educational/institutional) — building types regulated under SS553:2009, which scopes "commercial, office and institutional buildings" (excludes hospitals and residential; SS553 Clause 1.1, 1.4 also confirms no heating systems are needed in Singapore's climate) \citep{ss553-2009}. Split Unit System applies when building function is B1 (landed residential), B2 (condominium), or B3 (HDB) — multi-split systems are the standard residential ACMV practice in Singapore (HDB.gov.sg); centralised chiller cooling for residential remains a rare pilot exception (e.g., Tengah estate) as of 2026 and is not assumed by default. Condition parameter: hvacSystemType, derived from bms:function.</applicabilityCondition>
+    <rdfs:comment xml:lang="en">DATA PROVENANCE NOTE: cooling load density (coolingLoadPerArea, q), cooling tower count ratio (N_tower≈N_chiller), pump count ratio (N_pump≈2-3*N_chiller), and the refrigerant pipe layout coefficient used in the Split Unit System branch are common preliminary engineering design heuristics rather than values codified in a single published standard (no authoritative source for these specific ratios was found despite literature search). They should be treated as adjustable defaults and calibrated against local design practice or manufacturer data where possible, not cited as standard-derived constants.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N9aafb88ee6bb4025b0036f6db615220e">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="N5cf3cbcf9c5948258bc5f303f9fda440"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N8b26b752d1bd438090d0b747604fdf35">
+    <rdf:first rdf:resource="http://example.org/bms#Component"/>
+    <rdf:rest rdf:nodeID="N9fd1f8c58a0f4c3e84521a0763e1d5ab"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N7d820ba45d7a4f4eaa1a1188bee99737">
+    <rdf:first rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdf:rest rdf:nodeID="Ncc3435bca3994fab88695ecb9f21854d"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Nd07f70ac0c40415aad356dba9e464f32">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="N6954b8041a7048c3b8e3f5dca834364c"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#roofThickness">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#StructuralSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N6b1cfd7955664df48e5cc69d7872e61e">
+    <rdf:first rdf:resource="http://example.org/bms#Region"/>
+    <rdf:rest rdf:nodeID="N45fac6cb913a4f17b927a1649e50512e"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#belongsToBuilding">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Building"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#unitRoutingDistance">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#GasSupplySystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+    <rdfs:label xml:lang="en">unit routing distance</rdfs:label>
+    <rdfs:comment xml:lang="en">Typical copper branch pipe routing distance per served unit (alpha_unit, m/unit). Residential: 3–8; Hotel: 8–20; Commercial (F&amp;B/restaurant kitchen, not general office/retail): 10–30. Engineering design heuristic; not codified in a single published standard.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#length">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#Material">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://bimerr.iot.linkeddata.es/def/material-properties#Material"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#embodiedCarbonFactor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Material"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#cableTrayBranchFactor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#ElectricalSystem"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#notes">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="N6759c96a7a4b4d2cbfeee5adffb47bf5"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#area">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#name">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="Na12721a15f6b4ed78bbbf9d4f072bc3c"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N1821f382d20b487fbd5f2ca9aaec4a1c">
+    <rdf:first rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdf:rest rdf:nodeID="Nda7e8666d0994f379479d0f2b833b6ab"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#id">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="N5c331c8a1a1241eea147890edf09487e"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#function">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:nodeID="N9aafb88ee6bb4025b0036f6db615220e"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#calculationFormula">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AnnotationProperty"/>
+    <rdfs:label xml:lang="en">calculation formula</rdfs:label>
+    <rdfs:comment xml:lang="en">Documents the mathematical formula used to calculate material stock for a component or system. Intended for use by the reasoning script.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N463e90b7c5d045beb201824c7ad098c6">
+    <rdf:first rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdf:rest rdf:nodeID="N260e13a13a954f92a9669afee3daca62"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N260e13a13a954f92a9669afee3daca62">
+    <rdf:first rdf:resource="http://example.org/bms#Component"/>
+    <rdf:rest rdf:nodeID="Ne32ae6b74b4d4fa8b57f057d7337a19b"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N95158b66aa0748bca582e2841df5e9eb">
+    <rdf:first rdf:resource="http://example.org/bms#Archetype"/>
+    <rdf:rest rdf:nodeID="Ncb8ff04bb24c473cb0c7457f25601691"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Ncb8ff04bb24c473cb0c7457f25601691">
+    <rdf:first rdf:resource="http://example.org/bms#Building"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N6c0c1838530f4a8e9df97f59c21412d5">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="N95158b66aa0748bca582e2841df5e9eb"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#BuildingSystem">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Building System</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N19a58c278a804b4db11d758c9dddd2d3">
+    <rdf:first rdf:resource="http://example.org/bms#Component"/>
+    <rdf:rest rdf:nodeID="Nd1a4fe3845e5453f931e632b280ec410"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N37c47ec94f6a48e88c7314ee5ac25264">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="N486149ec7fa044a4bd93e7ca328bc42c"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N8a9949e3c9a148f693873bd048c9012e">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="Na789eab76d7c4f7f97a3a2dafc9f4810"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#Site">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Site</rdfs:label>
+    <rdfs:subClassOf rdf:resource="https://w3id.org/bot#Site"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#occupancyType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#MEP_COMPONENT_LEVEL">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://example.org/bms#ModelGranularityLevel"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Ne32ae6b74b4d4fa8b57f057d7337a19b">
+    <rdf:first rdf:resource="http://example.org/bms#Material"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Ne17e44bcca1b4fd2a88f780f33d41825">
+    <rdf:first rdf:resource="http://example.org/bms#Material"/>
+    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N5c331c8a1a1241eea147890edf09487e">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="Ne09cae709a95443e85d590a37c17b0bd"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#Archetype">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N486149ec7fa044a4bd93e7ca328bc42c">
+    <rdf:first rdf:resource="http://example.org/bms#Building"/>
+    <rdf:rest rdf:nodeID="N1821f382d20b487fbd5f2ca9aaec4a1c"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="Na12721a15f6b4ed78bbbf9d4f072bc3c">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <owl:unionOf rdf:nodeID="N0f00dca438864d9f9c426cdb971c9fa2"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N6954b8041a7048c3b8e3f5dca834364c">
+    <rdf:first rdf:resource="http://example.org/bms#Building"/>
+    <rdf:rest rdf:nodeID="Nc410dd8f48b144e99817a0f713c9aa46"/>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="N3ee2f9e0a2204ae087d90740fcf6bd16">
+    <rdf:first rdf:resource="http://example.org/bms#BuildingSystem"/>
+    <rdf:rest rdf:nodeID="Nc6381cbc67e24760ac2e3847eae8b049"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#MaterialIntensity">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Material Intensity</rdfs:label>
+    <rdfs:comment xml:lang="en">A building's empirically observed material intensity coefficient (MIC, e.g. m3/m2) for one material, as recorded in building_material_intensity. Reified as its own individual (rather than a direct Building-Material decimal property) purely so archetype peer-averaging can be expressed declaratively over intensityValue via SPARQL AVG/GROUP BY, mirroring how StructuralSystem/HVACSystem/etc. are already reified per building.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#intensityValue">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#MaterialIntensity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#decimal"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#forMaterial">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#MaterialIntensity"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Material"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#forBuilding">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#MaterialIntensity"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:comment xml:lang="en">Deliberately a distinct property from bms:belongsToBuilding (domain BuildingSystem) rather than a reuse of it: MaterialIntensity is not a BuildingSystem, and reusing belongsToBuilding would let OWL 2 RL domain-entailment incorrectly classify every MaterialIntensity individual as a BuildingSystem.</rdfs:comment>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://example.org/bms#componentBelongsToBuilding">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://example.org/bms#Component"/>
+    <rdfs:range rdf:resource="http://example.org/bms#Building"/>
+    <rdfs:comment xml:lang="en">Direct Component-to-Building shortcut for components (e.g. own-observed BIM interior_wall/column/beam/stair volumes) not otherwise attached to a reified BuildingSystem individual. Deliberately distinct from bms:belongsToBuilding (domain BuildingSystem): Component is declared owl:disjointWith BuildingSystem, so reusing belongsToBuilding would let OWL 2 RL domain-entailment classify every such Component as a BuildingSystem and, combined with the disjointness axiom, make the populated graph inconsistent.</rdfs:comment>
+  </rdf:Description>
+</rdf:RDF>

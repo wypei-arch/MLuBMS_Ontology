@@ -1,0 +1,16 @@
+PREFIX bms: <http://example.org/bms#>
+# Granularity selection (Step 3) input: buildings with an own observed
+# occupancy count (mep_subsys_drainage's "n_occ is not None" branch).
+# Deliberately a mandatory (non-OPTIONAL) triple pattern, not an OPTIONAL
+# alongside `?b a bms:Building`: an un-aggregated OPTIONAL on a property
+# from the SAME single mapping as the type triple makes Ontop emit a
+# UNION-based SQL translation that SQLite's parser rejects ("near UNION:
+# syntax error") -- reproduced even for the pre-existing grossFloorArea
+# property, so it's a general Ontop+SQLite limitation with that query
+# shape, not specific to any one property. A plain mandatory pattern
+# already gives exactly the semantics needed here (only buildings with a
+# non-null value are returned, since the mapping simply omits the triple
+# for NULL rows) and avoids the bug entirely.
+SELECT ?b ?occ WHERE {
+  ?b a bms:Building ; bms:occupancyCount ?occ .
+} ORDER BY ?b

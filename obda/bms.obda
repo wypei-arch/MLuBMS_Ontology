@@ -1,0 +1,58 @@
+[PrefixDeclaration]
+bms:		http://example.org/bms#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xsd:		http://www.w3.org/2001/XMLSchema#
+
+[MappingDeclaration] @collection [[
+mappingId	archetype
+target		bms:Archetype_{archetype_id} a bms:Archetype ; bms:archetypeUseType {use_type}^^xsd:string ; bms:archetypeYearBucket {construction_year_bucket}^^xsd:string ; bms:archetypeStructureType {structure_category}^^xsd:string .
+source		SELECT archetype_id, use_type, construction_year_bucket, NULLIF(structure_category, '') AS structure_category FROM archetype
+
+mappingId	building
+target		bms:Building_{building_id} a bms:Building ; bms:occupancyType {use_type}^^xsd:string ; bms:grossFloorArea {gross_floor_area_m2}^^xsd:decimal ; bms:windowToWallRatio {window_to_wall_ratio}^^xsd:decimal ; bms:footprintPerimeter {footprint_perimeter_m}^^xsd:decimal ; bms:height {height_m}^^xsd:decimal ; bms:occupancyCount {number_of_occupancy}^^xsd:integer ; bms:unitCount {number_of_unit}^^xsd:integer ; bms:averageUnitArea {average_unit_area}^^xsd:decimal .
+source		SELECT building_id, use_type, gross_floor_area_m2, window_to_wall_ratio, footprint_perimeter_m, height_m, number_of_occupancy, number_of_unit, average_unit_area FROM building
+
+mappingId	building-structuraltype
+target		bms:Building_{building_id} bms:structuralType {structure_name}^^xsd:string .
+source		SELECT b.building_id, st.name AS structure_name FROM building b, structure_type st WHERE st.structure_type_id = b.structure_type_id AND st.name IS NOT NULL
+
+mappingId	building-hasarchetype
+target		bms:Building_{building_id} bms:hasArchetype bms:Archetype_{archetype_id} .
+source		SELECT building_id, archetype_id FROM building WHERE archetype_id IS NOT NULL
+
+mappingId	building-yearbucket
+target		bms:Building_{building_id} bms:yearBucket {bucket}^^xsd:string .
+source		SELECT building_id, CASE WHEN construction_year < 1980 THEN '<1980' WHEN construction_year < 2000 THEN '1980-1999' ELSE '>=2000' END AS bucket FROM building
+
+mappingId	structuralsystem
+target		bms:StructuralSystem_{building_id} a bms:StructuralSystem ; bms:isObserved true ; bms:belongsToBuilding bms:Building_{building_id} ; bms:wallThickness {wall_thickness_m}^^xsd:decimal ; bms:slabThickness {slab_thickness_m}^^xsd:decimal ; bms:roofThickness {roof_thickness_m}^^xsd:decimal . bms:Building_{building_id} bms:hasSystem bms:StructuralSystem_{building_id} .
+source		SELECT building_id, wall_thickness_m, slab_thickness_m, roof_thickness_m FROM structural_system WHERE is_observed = 1
+
+mappingId	hvacsystem
+target		bms:HVACSystem_{building_id} a bms:HVACSystem ; bms:isObserved true ; bms:belongsToBuilding bms:Building_{building_id} ; bms:hvacSystemType {hvac_system_type}^^xsd:string ; bms:coolingLoadPerArea {cooling_load_per_area}^^xsd:decimal ; bms:airflowToCoolingLoadRatio {airflow_to_cooling_load_ratio}^^xsd:decimal ; bms:equivalentAreaFactor {equivalent_area_factor}^^xsd:decimal ; bms:chillerUnitCapacity {chiller_unit_capacity}^^xsd:decimal ; bms:numberOfUnits {numbers_of_units}^^xsd:decimal ; bms:conditionedArea {conditioned_area}^^xsd:decimal ; bms:conditionedAreaRatio {conditioned_area_ratio}^^xsd:decimal ; bms:refrigerantPipeLayoutCoefficient {layout_coefficient}^^xsd:decimal . bms:Building_{building_id} bms:hasSystem bms:HVACSystem_{building_id} .
+source		SELECT building_id, hvac_system_type, cooling_load_per_area, airflow_to_cooling_load_ratio, equivalent_area_factor, chiller_unit_capacity, numbers_of_units, conditioned_area, conditioned_area_ratio, layout_coefficient FROM hvac_system WHERE is_observed = 1
+
+mappingId	verticaltransportationsystem
+target		bms:VerticalTransportationSystem_{building_id} a bms:VerticalTransportationSystem ; bms:isObserved true ; bms:belongsToBuilding bms:Building_{building_id} ; bms:elevatorDensityPerArea {elevator_density_per_area}^^xsd:decimal ; bms:escalatorDensityPerArea {escalator_density_per_area}^^xsd:decimal . bms:Building_{building_id} bms:hasSystem bms:VerticalTransportationSystem_{building_id} .
+source		SELECT building_id, NULLIF(elevator_density_per_area, 0) AS elevator_density_per_area, escalator_density_per_area FROM vertical_transportation_system WHERE is_observed = 1
+
+mappingId	plumbingsystem
+target		bms:PlumbingSystem_{building_id} a bms:PlumbingSystem ; bms:isObserved true ; bms:belongsToBuilding bms:Building_{building_id} ; bms:fixtureDensityPerUnit {fixture_density_per_area}^^xsd:decimal ; bms:drainageMainLengthFactor {drainage_main_length_factor}^^xsd:decimal ; bms:drainageBranchLengthFactor {drainage_branch_length_factor}^^xsd:decimal . bms:Building_{building_id} bms:hasSystem bms:PlumbingSystem_{building_id} .
+source		SELECT building_id, fixture_density_per_area, drainage_main_length_factor, drainage_branch_length_factor FROM plumbing_system WHERE is_observed = 1
+
+mappingId	electricalsystem
+target		bms:ElectricalSystem_{building_id} a bms:ElectricalSystem ; bms:isObserved true ; bms:belongsToBuilding bms:Building_{building_id} ; bms:cableTrayMainFactor {cable_tray_main_factor}^^xsd:decimal ; bms:cableTrayBranchFactor {cable_tray_branch_factor}^^xsd:decimal . bms:Building_{building_id} bms:hasSystem bms:ElectricalSystem_{building_id} .
+source		SELECT building_id, cable_tray_main_factor, cable_tray_branch_factor FROM electrical_system WHERE is_observed = 1
+
+mappingId	material
+target		bms:Material_{material_id} a bms:Material .
+source		SELECT material_id FROM material
+
+mappingId	materialintensity
+target		bms:MaterialIntensity_{bmi_id} a bms:MaterialIntensity ; bms:forBuilding bms:Building_{building_id} ; bms:forMaterial bms:Material_{material_id} ; bms:intensityValue {intensity_value}^^xsd:decimal .
+source		SELECT bmi_id, building_id, material_id, intensity_value FROM building_material_intensity
+
+mappingId	component-structural-extra
+target		bms:Component_{component_id} a bms:Component ; bms:componentBelongsToBuilding bms:Building_{building_id} ; bms:componentType {component_type}^^xsd:string ; bms:volume {volume_m3}^^xsd:decimal .
+source		SELECT component_id, building_id, component_type, volume_m3 FROM component WHERE is_observed = 1 AND system_type = 'structural' AND component_type IN ('interior_wall','column','beam','stair') AND volume_m3 IS NOT NULL
+]]

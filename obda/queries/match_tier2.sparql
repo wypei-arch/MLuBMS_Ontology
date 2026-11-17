@@ -1,0 +1,8 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 2, tier 2 (generic): building matched to a structure-agnostic
+# archetype (use type + year bucket only; archetype has no structural category).
+SELECT ?b ?arch WHERE {
+  ?b a bms:Building ; bms:occupancyType ?u ; bms:yearBucket ?yb .
+  ?arch a bms:Archetype ; bms:archetypeUseType ?u ; bms:archetypeYearBucket ?yb .
+  FILTER NOT EXISTS { ?arch bms:archetypeStructureType ?any }
+} ORDER BY ?b

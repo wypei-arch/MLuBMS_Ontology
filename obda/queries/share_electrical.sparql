@@ -1,0 +1,10 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 3 (electrical peer-sharing): per-archetype average cable-tray
+# main/branch factors.
+SELECT ?arch (AVG(?main) AS ?avgMain) (COUNT(?main) AS ?nMain)
+             (AVG(?branch) AS ?avgBranch) (COUNT(?branch) AS ?nBranch) WHERE {
+  ?es a bms:ElectricalSystem ; bms:belongsToBuilding ?peer ; bms:isObserved true .
+  ?peer bms:hasArchetype ?arch .
+  OPTIONAL { ?es bms:cableTrayMainFactor ?main }
+  OPTIONAL { ?es bms:cableTrayBranchFactor ?branch }
+} GROUP BY ?arch ORDER BY ?arch

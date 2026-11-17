@@ -1,0 +1,11 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 3 (MIC peer-sharing): per-archetype, per-material average of
+# building_material_intensity.intensity_value over ALL real observations in
+# the archetype. Unlike share_structural.sparql, intensityValue is a
+# required (non-OPTIONAL) part of the MaterialIntensity pattern, so there is
+# no empty-group/AVG-returns-0 risk here: an (arch,mat) pair with zero real
+# observations simply produces no GROUP BY row at all, matching SQL exactly.
+SELECT ?arch ?mat (AVG(?val) AS ?avgVal) (COUNT(?val) AS ?n) WHERE {
+  ?mi a bms:MaterialIntensity ; bms:forBuilding ?peer ; bms:forMaterial ?mat ; bms:intensityValue ?val .
+  ?peer bms:hasArchetype ?arch .
+} GROUP BY ?arch ?mat ORDER BY ?arch ?mat

@@ -1,0 +1,12 @@
+PREFIX bms: <http://example.org/bms#>
+# Granularity selection (Step 3) input: per-building own wall/slab/roof
+# thickness bindings, for reached_struct_thickness's "own" branch (peer side
+# comes from share_structural.sparql). One StructuralSystem individual per
+# building (deterministic bms:StructuralSystem_{building_id} subject), so no
+# multiplicity risk from the per-field OPTIONALs.
+SELECT ?b (BOUND(?wall) AS ?hasWall) (BOUND(?slab) AS ?hasSlab) (BOUND(?roof) AS ?hasRoof) WHERE {
+  ?ss a bms:StructuralSystem ; bms:belongsToBuilding ?b .
+  OPTIONAL { ?ss bms:wallThickness ?wall }
+  OPTIONAL { ?ss bms:slabThickness ?slab }
+  OPTIONAL { ?ss bms:roofThickness ?roof }
+} ORDER BY ?b

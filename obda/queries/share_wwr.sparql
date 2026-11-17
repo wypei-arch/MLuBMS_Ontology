@@ -1,0 +1,10 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 3 (window peer-sharing): per-archetype average observed window
+# area per GFA, matching step3_reasoning.archetype_window_area_intensity_share.
+SELECT ?arch (AVG(?intensity) AS ?avgIntensity) (COUNT(?intensity) AS ?n) WHERE {
+  ?peer a bms:Building ; bms:hasArchetype ?arch ;
+        bms:windowToWallRatio ?wwr ; bms:footprintPerimeter ?perimeter ;
+        bms:height ?height ; bms:grossFloorArea ?gfa .
+  FILTER(?gfa > 0 && ?perimeter > 0 && ?height > 0)
+  BIND((?wwr * ?perimeter * ?height) / ?gfa AS ?intensity)
+} GROUP BY ?arch ORDER BY ?arch

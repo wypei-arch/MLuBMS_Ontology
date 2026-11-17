@@ -1,0 +1,10 @@
+PREFIX bms: <http://example.org/bms#>
+# Granularity selection (Step 3) input: per-building own fixture-density /
+# drainage-main / drainage-branch bindings, field-level (see own_vt.sparql
+# for why row-level existence is not sufficient here).
+SELECT ?b (BOUND(?fix) AS ?hasFix) (BOUND(?dmain) AS ?hasDmain) (BOUND(?dbranch) AS ?hasDbranch) WHERE {
+  ?ps a bms:PlumbingSystem ; bms:belongsToBuilding ?b .
+  OPTIONAL { ?ps bms:fixtureDensityPerUnit ?fix }
+  OPTIONAL { ?ps bms:drainageMainLengthFactor ?dmain }
+  OPTIONAL { ?ps bms:drainageBranchLengthFactor ?dbranch }
+} ORDER BY ?b

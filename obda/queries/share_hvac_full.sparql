@@ -1,0 +1,31 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 3 (HVAC load peer-sharing, numeric fields): per-archetype
+# average of every HVACSystem numeric field used downstream in Step 4's
+# central-chiller/split-unit sizing chain. Each field is its own OPTIONAL +
+# COUNT pair (same reasoning as share_structural.sparql): a building's own
+# HVACSystem individual can bind isObserved/hvacSystemType while leaving
+# e.g. chillerUnitCapacity unbound, so SPARQL AVG's empty-group-returns-0
+# behaviour must be distinguished from SQL AVG's NULL via an explicit COUNT.
+# hvacSystemType itself (categorical, majority-vote) is handled separately
+# in share_hvac_type.sparql, not here.
+SELECT ?arch
+  (AVG(?cool) AS ?avgCool) (COUNT(?cool) AS ?nCool)
+  (AVG(?airflow) AS ?avgAirflow) (COUNT(?airflow) AS ?nAirflow)
+  (AVG(?chiller) AS ?avgChiller) (COUNT(?chiller) AS ?nChiller)
+  (AVG(?layout) AS ?avgLayout) (COUNT(?layout) AS ?nLayout)
+  (AVG(?condArea) AS ?avgCondArea) (COUNT(?condArea) AS ?nCondArea)
+  (AVG(?condRatio) AS ?avgCondRatio) (COUNT(?condRatio) AS ?nCondRatio)
+  (AVG(?eqFactor) AS ?avgEqFactor) (COUNT(?eqFactor) AS ?nEqFactor)
+  (AVG(?numUnits) AS ?avgNumUnits) (COUNT(?numUnits) AS ?nNumUnits)
+WHERE {
+  ?hs a bms:HVACSystem ; bms:belongsToBuilding ?peer ; bms:isObserved true .
+  ?peer bms:hasArchetype ?arch .
+  OPTIONAL { ?hs bms:coolingLoadPerArea ?cool }
+  OPTIONAL { ?hs bms:airflowToCoolingLoadRatio ?airflow }
+  OPTIONAL { ?hs bms:chillerUnitCapacity ?chiller }
+  OPTIONAL { ?hs bms:refrigerantPipeLayoutCoefficient ?layout }
+  OPTIONAL { ?hs bms:conditionedArea ?condArea }
+  OPTIONAL { ?hs bms:conditionedAreaRatio ?condRatio }
+  OPTIONAL { ?hs bms:equivalentAreaFactor ?eqFactor }
+  OPTIONAL { ?hs bms:numberOfUnits ?numUnits }
+} GROUP BY ?arch ORDER BY ?arch

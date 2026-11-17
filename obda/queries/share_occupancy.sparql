@@ -1,0 +1,6 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 3 (occupancy peer-sharing): per-archetype average
+# number_of_occupancy, used by the water-tank/pump plumbing sizing chain.
+SELECT ?arch (AVG(?occ) AS ?avgOcc) (COUNT(?occ) AS ?n) WHERE {
+  ?peer a bms:Building ; bms:hasArchetype ?arch ; bms:occupancyCount ?occ .
+} GROUP BY ?arch ORDER BY ?arch

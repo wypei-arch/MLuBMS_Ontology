@@ -1,0 +1,11 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 3 (HVAC type peer-sharing, categorical): per-(archetype,type)
+# observation counts. hvacSystemType is categorical, so "the archetype's
+# shared value" is a majority vote, not an average -- the caller picks the
+# highest-count row per archetype in Python, with an alphabetical tie-break
+# (sorted(set(types)), key=types.count in step3_reasoning.py), matching the
+# ORDER BY here (?arch, count desc, ?type asc).
+SELECT ?arch ?type (COUNT(*) AS ?cnt) WHERE {
+  ?hs a bms:HVACSystem ; bms:belongsToBuilding ?peer ; bms:isObserved true ; bms:hvacSystemType ?type .
+  ?peer bms:hasArchetype ?arch .
+} GROUP BY ?arch ?type ORDER BY ?arch DESC(?cnt) ?type

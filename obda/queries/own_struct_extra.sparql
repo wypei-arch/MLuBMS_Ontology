@@ -1,0 +1,13 @@
+PREFIX bms: <http://example.org/bms#>
+# Granularity selection (Step 3) input: buildings with at least one own-
+# observed BIM structural component row (interior_wall/column/beam/stair
+# with a real volume), for reached_struct_extra. The component-structural-
+# extra mapping's SQL source already restricts to system_type='structural',
+# the four qualifying component_type values, is_observed=1 and
+# volume_m3 IS NOT NULL, so existence alone is sufficient here -- there is
+# deliberately no peer-sharing for this check (see step3_reasoning.py's
+# comment: a raw BIM volume is building-size-specific and not a size-
+# independent intensity that can be meaningfully averaged across peers).
+SELECT DISTINCT ?b WHERE {
+  ?c a bms:Component ; bms:componentBelongsToBuilding ?b .
+} ORDER BY ?b

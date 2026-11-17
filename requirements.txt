@@ -1,0 +1,12 @@
+# Python 3.12+ required (numpy 2.5.x does not support older versions).
+#
+# owlready2's bundled HermiT reasoner (used by code/verify_owl_consistency.py)
+# also needs a Java runtime on PATH (tested with Eclipse Temurin 21) --
+# the reasoner itself is not installable via pip.
+numpy==2.5.1
+owlready2==0.51
+owlrl==7.6.2
+rdflib==7.6.0
+
+# obda/validate_obda.py additionally needs a separate, non-pip setup
+# (Ontop CLI + JDK + SQLite JDBC driver) -- see obda/README.md.

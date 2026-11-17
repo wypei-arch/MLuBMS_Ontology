@@ -1,0 +1,14 @@
+PREFIX bms: <http://example.org/bms#>
+# Algorithm 3 (structural peer-sharing): per-archetype average wall/slab/roof
+# thickness over observed structural systems. COUNT alongside AVG so a field
+# with zero bindings (SPARQL AVG returns 0, SQL AVG returns NULL) can be
+# reported as "no observation to share" rather than a spurious 0.
+SELECT ?arch (AVG(?wall) AS ?avgWall) (COUNT(?wall) AS ?nWall)
+             (AVG(?slab) AS ?avgSlab) (COUNT(?slab) AS ?nSlab)
+             (AVG(?roof) AS ?avgRoof) (COUNT(?roof) AS ?nRoof) WHERE {
+  ?ss a bms:StructuralSystem ; bms:belongsToBuilding ?peer ; bms:isObserved true .
+  ?peer bms:hasArchetype ?arch .
+  OPTIONAL { ?ss bms:wallThickness ?wall }
+  OPTIONAL { ?ss bms:slabThickness ?slab }
+  OPTIONAL { ?ss bms:roofThickness ?roof }
+} GROUP BY ?arch ORDER BY ?arch

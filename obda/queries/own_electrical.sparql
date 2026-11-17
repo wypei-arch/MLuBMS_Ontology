@@ -1,0 +1,9 @@
+PREFIX bms: <http://example.org/bms#>
+# Granularity selection (Step 3) input: per-building own cable-tray
+# main/branch factor bindings, field-level (see own_vt.sparql for why
+# row-level existence is not sufficient here).
+SELECT ?b (BOUND(?main) AS ?hasMain) (BOUND(?branch) AS ?hasBranch) WHERE {
+  ?es a bms:ElectricalSystem ; bms:belongsToBuilding ?b .
+  OPTIONAL { ?es bms:cableTrayMainFactor ?main }
+  OPTIONAL { ?es bms:cableTrayBranchFactor ?branch }
+} ORDER BY ?b
