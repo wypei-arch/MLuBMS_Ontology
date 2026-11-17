@@ -5,6 +5,7 @@ abstract: "Ontology, reasoning/calculation code, validation scripts and an anony
 type: software
 version: 1.1.0
 date-released: "2026-11-17"
+doi: "10.5281/zenodo.24304002"
 url: "https://github.com/wypei-arch/MLuBMS_Ontology"
 repository-code: "https://github.com/wypei-arch/MLuBMS_Ontology"
 license: MIT

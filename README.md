@@ -228,10 +228,10 @@ If you use this ontology, code or dataset, please cite:
 
 (Full citation details, including DOI, will be added once the paper is
 published.) For the dataset specifically, see the suggested citation in
-`LICENSE-DATA`. Machine-readable citation metadata for this repository
-itself (code + ontology + data as a software release) is in `CITATION.cff` --
-GitHub renders this as a "Cite this repository" button, and it will also
-populate the citation shown once this repository is archived on Zenodo.
+`LICENSE-DATA`. This release is archived on Zenodo:
+[doi:10.5281/zenodo.24304002](https://doi.org/10.5281/zenodo.24304002).
+Machine-readable citation metadata is in `CITATION.cff` (GitHub renders it
+as a "Cite this repository" button).
 
 ## License
 
