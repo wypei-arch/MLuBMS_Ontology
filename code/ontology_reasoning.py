@@ -205,7 +205,13 @@ def build_live_graph(db_path=DB_PATH, tbox_path=TBOX_PATH, include_components_ma
 # ─────────────────────────────────────────────────────────────
 def build_archetype_tbox(g, cur):
     """Add owl:equivalentClass restriction-intersection definitions for
-    every archetype in the `archetype` table to graph `g`, in place."""
+    every archetype in the `archetype` table to graph `g`, in place.
+
+    Each archetype class A also gets the axiom
+        A rdfs:subClassOf [ owl:onProperty bms:hasArchetype ; owl:hasValue A ]
+    (owl:hasValue is allowed as a superclass expression in OWL 2 RL), so
+    OWL 2 RL closure infers the bms:hasArchetype link from class membership
+    (rule cls-hv2), not only the membership itself."""
     cur.execute("SELECT archetype_id, use_type, construction_year_bucket, structure_category FROM archetype")
     for aid, use_type, bucket, structure in cur.fetchall():
         cls = BMS[f"Archetype_{aid}"]
@@ -227,6 +233,13 @@ def build_archetype_tbox(g, cur):
         g.add((eq, RDF.type, OWL.Class))
         g.add((eq, OWL.intersectionOf, inter))
         g.add((cls, OWL.equivalentClass, eq))
+
+        # membership in A entails the bms:hasArchetype link to A (punned IRI)
+        hv = BNode()
+        g.add((hv, RDF.type, OWL.Restriction))
+        g.add((hv, OWL.onProperty, BMS.hasArchetype))
+        g.add((hv, OWL.hasValue, cls))
+        g.add((cls, RDFS.subClassOf, hv))
 
 
 def build_live_graph_with_dl_tbox(db_path=DB_PATH, tbox_path=TBOX_PATH, include_components_materials=False):

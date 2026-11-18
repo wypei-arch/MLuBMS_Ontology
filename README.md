@@ -207,7 +207,7 @@ Example:
 python code/verify_dl_classification.py
 ```
 ```
-13674 triples after closure; 75/75 buildings classified by DL reasoning
+14046 triples after closure; 75/75 buildings classified by DL reasoning
 DL correctly classified (exact tier match)     : 75
 Disagreements                                   : 0
 No mismatches: OWL 2 RL classification reproduces Algorithm 2 exactly for all 75 buildings.
