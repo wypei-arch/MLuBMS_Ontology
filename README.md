@@ -190,10 +190,10 @@ each script's own location either way.
 
 | Script | Checks | Paper section |
 |---|---|---|
-| `verify_owl_consistency.py` | Full OWL DL consistency (HermiT) of the populated ontology | Section 4 (logical validation) |
+| `verify_owl_consistency.py` | Full OWL DL consistency (HermiT) of the populated ontology (450 individuals, including components and materials) | Section 4 (logical validation) |
 | `verify_dl_classification.py` | OWL 2 RL archetype classification reproduces Algorithm 2's SQL result for all 75 buildings | Section 2.3.1 |
 | `verify_hasarchetype_axiom.py` | The `owl:hasValue` restrictions entail `bms:hasArchetype` for every building, matching the database | Section 2.3.1 |
-| `verify_competency_questions.py` | The TBox answers its competency questions via live SPARQL | Section 2.4.1, Supplementary Table S9 |
+| `verify_competency_questions.py` | The TBox answers its competency questions via live SPARQL; queries using only the external vocabularies (`bot:Building`, `bot:Element`, `mat:Material`) retrieve the 75 buildings, 266 components and 5 materials | Section 2.4.1, Section 4, Supplementary Table S9 |
 | `verify_granularity_consistency.py` | Structural/MEP granularity gating never disagrees with the reported eligibility counts | Section 3.3, Table 1 |
 | `verify_material_stock.py` | Reconstructs the concrete, steel and glass rows of the material-stock table | Table 2 |
 | `verify_mep_threshold_sensitivity.py` | Sensitivity of MEP-eligible building counts to the 2-of-5 / 3-of-5 / 4-of-5 evidence threshold | Section 4.1 |

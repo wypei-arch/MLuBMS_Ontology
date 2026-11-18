@@ -33,7 +33,8 @@ is any one of these classes"). This full-OWL-DL check matters because
 owlrl's rule-based OWL 2 RL profile does not surface such inconsistencies.
 
 Scope: checks the bms: TBox + archetype definitions + the live 75-building
-ABox only. owl:imports statements (BOT, SAREF4BLDG, BIMERR, OM) are
+ABox, including the BIM-recorded Component and the Material individuals
+(build_live_graph(include_components_materials=True)). owl:imports statements (BOT, SAREF4BLDG, BIMERR, OM) are
 deliberately stripped before handing the graph to owlready2/HermiT, matching
 ontology_reasoning.py's own choice not to resolve them.
 
@@ -64,9 +65,9 @@ def normalise(g):
 
 
 def main():
-    print("Building live graph + archetype TBox + full 75-building ABox "
-          "(same construction as verify_dl_classification.py)...")
-    g = build_live_graph_with_dl_tbox()
+    print("Building live graph + archetype TBox + full 75-building ABox, "
+          "including components and materials...")
+    g = build_live_graph_with_dl_tbox(include_components_materials=True)
     print(f"  {len(g)} triples before stripping imports")
 
     imports_removed = 0

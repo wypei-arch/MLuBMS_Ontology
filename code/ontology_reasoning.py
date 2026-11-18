@@ -67,11 +67,17 @@ def _bucket(year):
         return ">=2000"
 
 
-def build_live_graph(db_path=DB_PATH, tbox_path=TBOX_PATH):
+def build_live_graph(db_path=DB_PATH, tbox_path=TBOX_PATH, include_components_materials=False):
     """Fresh rdflib.Graph = TBox (from ../ontology/mlubms_ontology.rdf) + ABox
     instance triples read from the CURRENT state of the anonymized database.
     Nothing here is cached or written back to disk -- call this again after
-    any database change and the graph reflects it immediately."""
+    any database change and the graph reflects it immediately.
+
+    By default the ABox holds what archetype reasoning needs (archetypes,
+    buildings, structural and HVAC systems). With
+    include_components_materials=True it also adds the BIM-recorded
+    Component individuals and the Material individuals, which the logical
+    validation and the external-alignment queries use."""
     g = Graph()
     g.parse(tbox_path, format="xml")
     g.bind("bms", BMS)
@@ -151,6 +157,23 @@ def build_live_graph(db_path=DB_PATH, tbox_path=TBOX_PATH):
         if k is not None:
             g.add((hs_uri, BMS.airflowToCoolingLoadRatio, Literal(k, datatype=XSD.decimal)))
 
+    if include_components_materials:
+        # ---- Component instances (BIM-recorded element and product records) ----
+        cur.execute("SELECT component_id, building_id, component_type FROM component")
+        for cid, bid, ctype in cur.fetchall():
+            c_uri = BMS[f"Component_{cid}"]
+            g.add((c_uri, RDF.type, BMS.Component))
+            g.add((c_uri, BMS.componentBelongsToBuilding, BMS[f"Building_{bid}"]))
+            if ctype:
+                g.add((c_uri, BMS.componentType, Literal(ctype)))
+        # ---- Material instances ----
+        cur.execute("SELECT material_id, name FROM material")
+        for mid, name in cur.fetchall():
+            m_uri = BMS[f"Material_{mid}"]
+            g.add((m_uri, RDF.type, BMS.Material))
+            if name:
+                g.add((m_uri, BMS.name, Literal(name)))
+
     conn.close()
     return g
 
@@ -206,7 +229,7 @@ def build_archetype_tbox(g, cur):
         g.add((cls, OWL.equivalentClass, eq))
 
 
-def build_live_graph_with_dl_tbox(db_path=DB_PATH, tbox_path=TBOX_PATH):
+def build_live_graph_with_dl_tbox(db_path=DB_PATH, tbox_path=TBOX_PATH, include_components_materials=False):
     """Like build_live_graph, but also materialises each Building's
     yearBucket as an asserted data property (OWL RL has no built-in
     arithmetic to derive a bucket from a raw year, so this is computed once
@@ -215,7 +238,7 @@ def build_live_graph_with_dl_tbox(db_path=DB_PATH, tbox_path=TBOX_PATH):
     definitions (build_archetype_tbox). Returns the graph BEFORE running the
     reasoner; call classify_archetypes_dl to run OWL RL closure and read off
     the result."""
-    g = build_live_graph(db_path, tbox_path)
+    g = build_live_graph(db_path, tbox_path, include_components_materials)
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
     cur.execute("SELECT building_id, construction_year FROM building")

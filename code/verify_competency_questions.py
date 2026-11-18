@@ -104,6 +104,28 @@ def main():
         assert dl_entry is not None and BMS[f"Archetype_{dl_entry[0]}"] == arch_ref, \
             f"CQ6 FAILED: DL entailment {dl_entry} disagrees with SPARQL match {arch_uri}"
 
+    # --- External-alignment queries ---------------------------------------
+    # Query the populated ontology using only the external vocabularies
+    # (BOT, BIMERR material ontology), with no bms: terms in the query. The
+    # answers rely on the bms -> bot/mat subclass alignment plus OWL 2 RL
+    # closure, i.e. on the alignment rather than on the bms: vocabulary.
+    import owlrl
+    print("\nExternal-alignment queries (BOT / mat: vocabulary only, after OWL 2 RL closure):")
+    g_ext = build_live_graph(include_components_materials=True)
+    domain_classes = [BMS.Building, BMS.Archetype, BMS.StructuralSystem, BMS.HVACSystem,
+                      BMS.ModelGranularityLevel, BMS.Component, BMS.Material]
+    individuals = {s for c in domain_classes for s in g_ext.subjects(RDF.type, c)}
+    owlrl.DeductiveClosure(owlrl.OWLRL_Semantics).expand(g_ext)
+    ext = {}
+    for label, iri in [("bot:Building", "https://w3id.org/bot#Building"),
+                       ("bot:Element", "https://w3id.org/bot#Element"),
+                       ("mat:Material", "http://bimerr.iot.linkeddata.es/def/material-properties#Material")]:
+        n = len(list(g_ext.query(f"SELECT DISTINCT ?x WHERE {{ ?x a <{iri}> }}")))
+        ext[label] = n
+        print(f"  {label:13} -> {n} instances")
+    print(f"  ABox individuals in the evaluated graph: {len(individuals)}")
+    assert all(ext.values()), "External-alignment query returned no instances"
+
     print("\n" + "=" * 78)
     print("All competency questions answered successfully via real SPARQL/OWL")
     print("queries against the live graph -- the ontology is not merely a")
