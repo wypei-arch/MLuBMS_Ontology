@@ -3,9 +3,9 @@ message: "If you use this ontology, code, or dataset, please cite it as below. C
 title: "MLuBMS: Data-Adaptive Multi-Level Building Material Stock Modeling with an Ontology-Aligned Framework"
 abstract: "Ontology, reasoning/calculation code, validation scripts and an anonymized case-study database accompanying the paper 'Data-Adaptive Multi-Level Building Material Stock Modeling: An Ontology-Aligned Framework' (Pei, Xiong, Cao, Habert, Stouffs; submitted to Resources, Conservation & Recycling, 2026)."
 type: software
-version: 1.1.1
+version: 1.1.2
 date-released: "2026-11-18"
-doi: "10.5281/zenodo.24332635"
+doi: "10.5281/zenodo.24342997"
 url: "https://github.com/wypei-arch/MLuBMS_Ontology"
 repository-code: "https://github.com/wypei-arch/MLuBMS_Ontology"
 license: MIT
