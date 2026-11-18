@@ -229,7 +229,7 @@ If you use this ontology, code or dataset, please cite:
 (Full citation details, including DOI, will be added once the paper is
 published.) For the dataset specifically, see the suggested citation in
 `LICENSE-DATA`. This release is archived on Zenodo:
-[doi:10.5281/zenodo.24304002](https://doi.org/10.5281/zenodo.24304002).
+[doi:10.5281/zenodo.24332635](https://doi.org/10.5281/zenodo.24332635).
 Machine-readable citation metadata is in `CITATION.cff` (GitHub renders it
 as a "Cite this repository" button).
 
